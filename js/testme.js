@@ -5,15 +5,37 @@ if (typeof document.querySelectorAll == 'undefined')
 TestMe = {
   util: {
     findElementByText: function(text) {
-      var testElement = function(element) {
-        if (element.length > 1)
+      var testElement = function(queryResult) {
+        if (queryResult.length > 1)
           throw "More than one element found!";
-        else if (element.length == 1) 
-          return element.item(0);        
+        else if (queryResult.length == 1) 
+          return queryResult.item(0);
+        
+        return false;
       }
+      
+      var operations = [
+        function() {
+          return testElement(document.querySelectorAll('[value="'+text+'"]'));
+        },
+        
+        function() {
+          return testElement(document.querySelectorAll('[title="'+text+'"]'));
+        },
+        
+        function() {
+          // RegEx to get the element that holds <i>text</i> as a child TextNode
+          document.body.innerHTML.match(/<[A-z]+.[^<]+>Video<\/[A-z]+>/g);
+        }
+      ];
     
       try {
-        var element = testElement(document.querySelectorAll('[title="'+text+'"]'));
+        var 
+          i = 0,
+          element;
+        while(!(element instanceof HTMLElement) || i < operations.length) {
+          element = operations[i]();
+        }
       } catch (e) {
         // @TODO do something clever
       }        
