@@ -6,12 +6,15 @@ TestMe = {
   util: {
     findElementByText: function(text) {
       var testElement = function(queryResult) {
+        if (typeof queryResult != 'object'            || 
+            typeof queryResult.length == 'undefined'  ||
+            queryResult.length < 1)
+          return false;
+
         if (queryResult.length > 1)
           throw "More than one element found!";
-        else if (queryResult.length == 1) 
+
           return queryResult[0];
-        
-        return false;
       }
       
       var operations = [
@@ -24,17 +27,32 @@ TestMe = {
         },
         
         function() {
+          // @TODO Test if the regex algorithm is better than traversing document.all
+
           var 
             // RegEx to get the element that holds <i>text</i> as a child TextNode
-            getHoldingElementInnerHTML  = new RegExp('<[A-z]+.[^<]*>\W*' + text + '\W*<\/[A-z]+>', 'g'),
-            getElementTag               = new RegExp('<[A-z]+', 'g'),
-            elementTag;
+            getHoldingElementInnerHTML  = new RegExp('<[A-z]+[^<]*>[^A-z0-9]*' + text + '[^A-z0-9]*<\/[A-z]+>', 'g'),
+            getElementTag               = new RegExp('<[A-z]+', 'g');
             
-            
-          // Now we have the element's tag, we'll have to find the position of its OCORRÊNCIA and count how many elements of the same tag
-          // there are in the document before the OCORRÊNCIA. This will give us the index of the element in the NodeList returned by
-          // querySelectorAll("<tag>");
-          elementTag = testElement(document.body.innerHTML.match(getHoldingElementInnerHTML)).match(getElementTag).substr(1);
+          // Tries to find the text surrounded by a tag
+          var elementOuterHTML = testElement(document.body.innerHTML.match(getHoldingElementInnerHTML));
+
+          if (elementOuterHTML === false) 
+            return false;
+
+          var
+            // Gets the position of the elements first char at the body's innerHTML
+            elementPosition = document.body.innerHTML.search(getHoldingElementInnerHTML),
+
+            // Gets the element tag
+            elementTag = elementOuterHTML.match(getElementTag)[0].substr(1),
+
+            // Counts how many times tag has occurred in the body's innerHTML, from beggining to the element's position
+            getElementTagCount = new RegExp('<'+elementTag+'[^<]*>[.\W]*(<\/'+elementTag+'>)?', 'g'),
+            elementIndex       = (matches = document.body.innerHTML.substring(0, elementPosition).match(getElementTagCount)) ? matches.length : 0;
+
+          // Returns the element at position
+          return document.getElementsByTagName(elementTag).item(elementIndex);
         }
       ];
     
