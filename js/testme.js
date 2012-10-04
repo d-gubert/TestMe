@@ -9,7 +9,7 @@ TestMe = {
         if (queryResult.length > 1)
           throw "More than one element found!";
         else if (queryResult.length == 1) 
-          return queryResult.item(0);
+          return queryResult[0];
         
         return false;
       }
@@ -27,10 +27,14 @@ TestMe = {
           var 
             // RegEx to get the element that holds <i>text</i> as a child TextNode
             getHoldingElementInnerHTML  = new RegExp('<[A-z]+.[^<]*>\W*' + text + '\W*<\/[A-z]+>', 'g'),
-            getElementTag               = new RegExp('<([A-z])(\s|>)', 'g'),
-            matches;
+            getElementTag               = new RegExp('<[A-z]+', 'g'),
+            elementTag;
             
-          matches = document.body.innerHTML.match(getHoldingElementInnerHTML);
+            
+          // Now we have the element's tag, we'll have to find the position of its OCORRÊNCIA and count how many elements of the same tag
+          // there are in the document before the OCORRÊNCIA. This will give us the index of the element in the NodeList returned by
+          // querySelectorAll("<tag>");
+          elementTag = testElement(document.body.innerHTML.match(getHoldingElementInnerHTML)).match(getElementTag).substr(1);
         }
       ];
     
