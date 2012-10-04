@@ -24,8 +24,13 @@ TestMe = {
         },
         
         function() {
-          // RegEx to get the element that holds <i>text</i> as a child TextNode
-          document.body.innerHTML.match(/<[A-z]+.[^<]+>Video<\/[A-z]+>/g);
+          var 
+            // RegEx to get the element that holds <i>text</i> as a child TextNode
+            getHoldingElementInnerHTML  = new RegExp('<[A-z]+.[^<]*>\W*' + text + '\W*<\/[A-z]+>', 'g'),
+            getElementTag               = new RegExp('<([A-z])(\s|>)', 'g'),
+            matches;
+            
+          matches = document.body.innerHTML.match(getHoldingElementInnerHTML);
         }
       ];
     
