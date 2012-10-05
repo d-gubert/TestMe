@@ -27,12 +27,14 @@ TestMe = {
         },
         
         function() {
-          // @TODO Test if the regex algorithm is better than traversing document.all
-
+          return testElement(document.querySelectorAll('[alt="'+text+'"]'));
+        },
+        
+        function() {
           var 
             // RegEx to get the element that holds <i>text</i> as a child TextNode
-            getHoldingElementInnerHTML  = new RegExp('<[A-z]+[^<]*>[^A-z0-9]*' + text + '[^A-z0-9]*<\/[A-z]+>', 'g'),
-            getElementTag               = new RegExp('<[A-z]+', 'g');
+            getHoldingElementInnerHTML  = new RegExp('<[A-z0-9]+[^<]*>[^A-z0-9]*' + text + '[^A-z0-9]*<\/[A-z0-9]+>', 'g'),
+            getElementTag               = new RegExp('<[A-z0-9]+', 'g');
             
           // Tries to find the text surrounded by a tag
           var elementOuterHTML = testElement(document.body.innerHTML.match(getHoldingElementInnerHTML));
