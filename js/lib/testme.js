@@ -6,7 +6,7 @@ TestMe = {
   util: {
     findElementByText: function(text) {
       var testElement = function(queryResult) {
-        if (typeof queryResult != 'object'            || 
+        if (typeof queryResult != 'object'            ||
             typeof queryResult.length == 'undefined'  ||
             queryResult.length < 1)
           return false;
@@ -16,30 +16,30 @@ TestMe = {
 
           return queryResult[0];
       }
-      
+
       var operations = [
         function() {
           return testElement(document.querySelectorAll('[value="'+text+'"]'));
         },
-        
+
         function() {
           return testElement(document.querySelectorAll('[title="'+text+'"]'));
         },
-        
+
         function() {
           return testElement(document.querySelectorAll('[alt="'+text+'"]'));
         },
-        
+
         function() {
-          var 
+          var
             // RegEx to get the element that holds <i>text</i> as a child TextNode
-            getHoldingElementInnerHTML  = new RegExp('<[A-z0-9]+[^<]*>[^A-z0-9]*' + text + '[^A-z0-9]*<\/[A-z0-9]+>', 'g'),
+            getHoldingElementInnerHTML  = new RegExp('<[A-z0-9]+[^<]*>[^A-z0-9]*' + text + '[^A-z0-9]*</[A-z0-9]+>', 'g'),
             getElementTag               = new RegExp('<[A-z0-9]+', 'g');
-            
+
           // Tries to find the text surrounded by a tag
           var elementOuterHTML = testElement(document.body.innerHTML.match(getHoldingElementInnerHTML));
 
-          if (elementOuterHTML === false) 
+          if (elementOuterHTML === false)
             return false;
 
           var
@@ -57,9 +57,9 @@ TestMe = {
           return document.getElementsByTagName(elementTag).item(elementIndex);
         }
       ];
-    
+
       try {
-        var 
+        var
           i = 0,
           element;
         while(!(element instanceof HTMLElement) || i < operations.length) {
@@ -67,7 +67,7 @@ TestMe = {
         }
       } catch (e) {
         // @TODO do something clever
-      }        
+      }
     }
   }
 }
