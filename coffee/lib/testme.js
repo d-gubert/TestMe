@@ -30,12 +30,12 @@
             return testElement(document.querySelectorAll('[alt="' + text + '"]'));
           }, function() {
             var elementIndex, elementOuterHTML, elementPosition, elementTag, getElementTag, getElementTagCount, getHoldingElementInnerHTML, _ref;
-            getHoldingElementInnerHTML = new RegExp('<[A-z0-9]+[^<]*>[^A-z0-9]*' + text + '[^A-z0-9]*</[A-z0-9]+>', 'g');
+            getHoldingElementInnerHTML = new RegExp("<[A-z0-9]+[^<]*>[^A-z0-9]*" + text + "[^A-z0-9]*</[A-z0-9]+>", 'g');
             getElementTag = new RegExp('<[A-z0-9]+', 'g');
             elementOuterHTML = testElement(document.body.innerHTML.match(getHoldingElementInnerHTML));
             elementPosition = document.body.innerHTML.search(getHoldingElementInnerHTML);
             elementTag = elementOuterHTML.match(getElementTag)[0].substr(1);
-            getElementTagCount = new RegExp('<' + elementTag + '[^<]*>[.\W]*(<\/' + elementTag + '>)?', 'g');
+            getElementTagCount = new RegExp("<" + elementTag + "[^<]*>[.\W]*(<\/" + elementTag + ">)?", 'g');
             elementIndex = (_ref = document.body.innerHTML.substring(0, elementPosition).match(getElementTagCount)) != null ? _ref.length : void 0;
             return document.getElementsByTagName(elementTag).item(elementIndex);
           }
@@ -58,7 +58,7 @@
 
     TestCase.prototype.addInstruction = function(instructionObject) {
       if (instructionObject === null || typeof instructionObject !== 'object' || instructionObject.description === null || instructionObject["function"] === null) {
-        throw "Unrecognized instruction";
+        throw "Unrecognized object can't be used as instruction";
       }
       return this.instructions.push(instructionObject);
     };
